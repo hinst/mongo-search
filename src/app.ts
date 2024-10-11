@@ -8,6 +8,7 @@ async function main() {
 	try {
 		const db = client.db(dbName);
 		const collections = await db.collections();
+		let totalFinds = 0;
 		for (let i = 0; i < collections.length; i++) {
 			const collectionInfo = collections[i];
 			console.log('Searching collection ' + collectionInfo.collectionName + '[' + i + '/' + collections.length + ']');
@@ -21,9 +22,11 @@ async function main() {
 				const lowerCaseText = JSON.stringify(document).toLowerCase();
 				if (lowerCaseText.includes(lowerCaseDesiredText)) {
 					console.log(`Found in ${collectionInfo.collectionName} [${document?._id}] ${text.slice(0, 100)}`);
+					totalFinds++;
 				}
 			}
 		}
+		console.log('Total finds: ' + totalFinds);
 	} finally {
 		await client.close();
 	}
